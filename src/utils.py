@@ -111,6 +111,14 @@ def compute_candlestick_formations(data):
     pass
 
 
+def compute_up_down_ratio(data):
+    up = len(data[data['Return']>0])
+    down = len(data[data['Return']<0])
+
+    if down == 0:
+        return float('inf')
+
+    return round(up / down, 3)
 
 
 def filter_data(data, last_n_days, resolution):

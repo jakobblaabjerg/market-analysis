@@ -2,8 +2,8 @@ import altair as alt
 import plotly.express as px
 import streamlit as st
 
-from src.utils import load_data_from_yf, transform_data, compute_indicators, filter_data
-from src.visualizations import candlestick_plot
+from src.utils import load_data_from_yf, transform_data, compute_indicators, filter_data, compute_up_down_ratio
+from src.visualizations import candlestick_plot, return_distribution_plot
 from src.enums import Ticker
 
 st.set_page_config(
@@ -44,3 +44,19 @@ data = transform_data(data, selected_resolution)
 data = compute_indicators(data)
 data = filter_data(data, selected_n_days, selected_resolution)
 candlestick_plot(data, ticker=selected_ticker.value, indicators=["SMA_200", "EMA_8"])
+
+# st.markdown("---")
+
+col1, col2, col3 = st.columns([2, 1, 7])
+
+with col1:
+    st.markdown("<div style='height:250px;'></div>", unsafe_allow_html=True)
+    st.metric("Up/Down Ratio", compute_up_down_ratio(data), border=True)
+
+with col3:
+    return_distribution_plot(data, ticker=selected_ticker.value)
+
+
+
+
+

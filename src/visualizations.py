@@ -1,5 +1,6 @@
 import plotly.graph_objects as go
 import streamlit as st
+import numpy as np
 
 def candlestick_plot(data, ticker, indicators):
 
@@ -46,4 +47,48 @@ def candlestick_plot(data, ticker, indicators):
         dragmode="zoom"
     )
 
+
     st.plotly_chart(fig, use_container_width=True)
+
+
+def return_distribution_plot(data, ticker):
+    returns = data['Return'].dropna()
+    mean = returns.mean()
+    std = returns.std()
+
+    hist = go.Histogram(
+        x=returns,
+        nbinsx=50,
+        marker_color='skyblue',
+        opacity=0.75,
+        name='Returns'
+    )
+
+    lines = []
+    for i in range(-3, 4):
+        line_color = 'red'
+        line_style = 'solid' if i == 0 else 'dash'
+        lines.append(
+            go.Scatter(
+                x=[mean + i * std, mean + i * std],
+                y=[0, max(np.histogram(returns, bins=50)[0])],
+                mode='lines',
+                line=dict(color=line_color, dash=line_style, width=1.5),
+                showlegend=False
+            )
+        )
+
+    fig = go.Figure(data=[hist] + lines)
+
+    fig.update_layout(
+        xaxis_title='Return',
+        yaxis_title='Frequency',
+        bargap=0.05,
+        template='plotly_white'
+    )
+
+    st.plotly_chart(fig)
+
+
+    # ratio between 
+    # sharp ratio 

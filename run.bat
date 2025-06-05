@@ -1,0 +1,1 @@
+cd "C:\Users\Jakob Blaabjerg\Documents\projects\git\market-analysis" && call .env/Scripts/activate && streamlit run app.py 
